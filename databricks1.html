@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<!-- saved from url=(0105)https://microsoftlearning.github.io/mslearn-databricks/Instructions/Labs/01-Explore-Azure-Databricks.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>
+            mslearn-databricks
+        </title>
+        
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="stylesheet" href="./databricks1_files/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link rel="stylesheet" href="./databricks1_files/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        <link rel="stylesheet" href="./databricks1_files/vs.min.css">
+        <script src="./databricks1_files/highlight.min.js.download"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+        <link rel="stylesheet" href="./databricks1_files/style.css">
+    </head>
+    <body data-spy="scroll" data-target="#linksMenu" data-new-gr-c-s-check-loaded="14.1089.0" data-gr-ext-installed="">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-gray">
+        <div class="container d-flex justify-content-between">
+            <a class="my-1 title text-white" href="https://docs.microsoft.com/training/">
+                <img src="./databricks1_files/microsoft-gray.png" alt="Microsoft logo" style="width:100px;height:21px;">
+            </a>
+            <span class="my-1 title text-black">Microsoft Learn</span>
+            <span class="ml-2"><a href="https://microsoftlearning.github.io/mslearn-databricks">≡</a></span>
+        </div>
+        <!--
+        <div class="container d-flex justify-content-between">
+            <a class="my-1 title text-azure text-uppercase" href="https://microsoftlearning.github.io/mslearn-databricks">
+                mslearn-databricks
+            </a>
+            <a href="https://github.com/MicrosoftLearning/mslearn-databricks" target="_blank" class="btn btn-sm btn-outline-secondary text-light">
+                <i class="fa fa-github" aria-hidden="true"></i>
+                <span class="ml-2">GitHub</span>
+            </a>
+        </div>
+        -->
+    </nav>
+    <hr color-"gray"="">
+    <div class="container">
+        <main class="row extra-padding">
+            <aside class="col-sm-2">       
+                <nav id="linksMenu" class="toc sticky-top">
+                    <ul class="nav navbar-nav flex-column">
+                    <li class="nav-item"><a class="nav-link" href="https://microsoftlearning.github.io/mslearn-databricks/Instructions/Labs/01-Explore-Azure-Databricks.html#before-you-start">Before you start</a></li><li class="nav-item"><a class="nav-link" href="https://microsoftlearning.github.io/mslearn-databricks/Instructions/Labs/01-Explore-Azure-Databricks.html#provision-an-azure-databricks-workspace">Provision an Azure Databricks workspace</a></li><li class="nav-item"><a class="nav-link" href="https://microsoftlearning.github.io/mslearn-databricks/Instructions/Labs/01-Explore-Azure-Databricks.html#create-a-cluster">Create a cluster</a></li><li class="nav-item"><a class="nav-link" href="https://microsoftlearning.github.io/mslearn-databricks/Instructions/Labs/01-Explore-Azure-Databricks.html#use-spark-to-analyze-a-data-file">Use Spark to analyze a data file</a></li><li class="nav-item"><a class="nav-link" href="https://microsoftlearning.github.io/mslearn-databricks/Instructions/Labs/01-Explore-Azure-Databricks.html#create-and-query-a-database-table">Create and query a database table</a></li><li class="nav-item"><a class="nav-link active" href="https://microsoftlearning.github.io/mslearn-databricks/Instructions/Labs/01-Explore-Azure-Databricks.html#delete-azure-databricks-resources">Delete Azure Databricks resources</a></li></ul>
+                </nav>         
+            </aside>
+            <hr class="">
+            <article class="col-sm-10 mb-5">
+                <h1 id="explore-azure-databricks">Explore Azure Databricks</h1>
+
+<p>Azure Databricks is a Microsoft Azure-based version of the popular open-source Databricks platform.</p>
+
+<p>Similarly to Azure Synapse Analytics, an Azure Databricks <em>workspace</em> provides a central point for managing Databricks clusters, data, and resources on Azure.</p>
+
+<p>This lab will take approximately <strong>30</strong> minutes to complete.</p>
+
+<h2 id="before-you-start">Before you start</h2>
+
+<p>You’ll need an <a href="https://azure.microsoft.com/free">Azure subscription</a> in which you have administrative-level access.</p>
+
+<h2 id="provision-an-azure-databricks-workspace">Provision an Azure Databricks workspace</h2>
+
+<p>In this exercise, you’ll use a script to provision a new Azure Databricks workspace.</p>
+
+<ol>
+  <li>In a web browser, sign into the <a href="https://portal.azure.com/">Azure portal</a> at <code>https://portal.azure.com</code>.</li>
+  <li>
+    <p>Use the <strong>[&gt;_]</strong> button to the right of the search bar at the top of the page to create a new Cloud Shell in the Azure portal, selecting a <strong><em>PowerShell</em></strong> environment and creating storage if prompted. The cloud shell provides a command line interface in a pane at the bottom of the Azure portal, as shown here:</p>
+
+    <p><a href="./databricks1_files/cloud-shell.png" target="_blank"><img src="./databricks1_files/cloud-shell.png" alt="Azure portal with a cloud shell pane"></a></p>
+
+    <blockquote>
+      <p><strong>Note</strong>: If you have previously created a cloud shell that uses a <em>Bash</em> environment, use the the drop-down menu at the top left of the cloud shell pane to change it to <strong><em>PowerShell</em></strong>.</p>
+    </blockquote>
+  </li>
+  <li>
+    <p>Note that you can resize the cloud shell by dragging the separator bar at the top of the pane, or by using the <strong>—</strong>, <strong>◻</strong>, and <strong>X</strong> icons at the top right of the pane to minimize, maximize, and close the pane. For more information about using the Azure Cloud Shell, see the <a href="https://docs.microsoft.com/azure/cloud-shell/overview">Azure Cloud Shell documentation</a>.</p>
+  </li>
+  <li>
+    <p>In the PowerShell pane, enter the following commands to clone this repo:</p>
+
+    <div class="code-header mt-3 mb-0 bg-light d-flex justify-content-between border"><span class="mx-2 text-muted text-capitalize font-weight-light">code</span><button class="m-0 btn btn-code btn-sm btn-light codeBtn rounded-0 border-left text-muted font-weight-light" data-clipboard-target="#codeBlock0" type="button"><i class="fa fa-files-o mr-2" aria-hidden="true"></i>Copy</button></div><pre id="codeBlock0" class="mt-0"><code class="hljs nginx"> <span class="hljs-attribute"><span class="hljs-attribute">rm</span></span> -r dp-<span class="hljs-number"><span class="hljs-number">000</span></span> -f
+ git clone https://github.com/MicrosoftLearning/mslearn-databricks dp-<span class="hljs-number"><span class="hljs-number">000</span></span>
+</code></pre>
+  </li>
+  <li>
+    <p>After the repo has been cloned, enter the following commands to change to the folder for this lab and run the <strong>setup.ps1</strong> script it contains:</p>
+
+    <div class="code-header mt-3 mb-0 bg-light d-flex justify-content-between border"><span class="mx-2 text-muted text-capitalize font-weight-light">code</span><button class="m-0 btn btn-code btn-sm btn-light codeBtn rounded-0 border-left text-muted font-weight-light" data-clipboard-target="#codeBlock1" type="button"><i class="fa fa-files-o mr-2" aria-hidden="true"></i>Copy</button></div><pre id="codeBlock1" class="mt-0"><code class="hljs bash"> <span class="hljs-built_in"><span class="hljs-built_in">cd</span></span> dp-000/Allfiles/Labs/01
+ ./setup.ps1
+</code></pre>
+  </li>
+  <li>
+    <p>If prompted, choose which subscription you want to use (this will only happen if you have access to multiple Azure subscriptions).</p>
+  </li>
+  <li>Wait for the script to complete - this typically takes around 5 minutes, but in some cases may take longer. While you are waiting, review the <a href="https://docs.microsoft.com/azure/databricks/scenarios/what-is-azure-databricks">What is Azure Databricks?</a> article in the Azure Databricks documentation.</li>
+</ol>
+
+<h2 id="create-a-cluster">Create a cluster</h2>
+
+<p>Azure Databricks is a distributed processing platform that uses Apache Spark <em>clusters</em> to process data in parallel on multiple nodes. Each cluster consists of a driver node to coordinate the work, and worker nodes to perform processing tasks.</p>
+
+<blockquote>
+  <p><strong>Note</strong>: In this exercise, you’ll create a <em>single-node</em> cluster to minimize the compute resources used in the lab environment (in which resources may be constrained). In a production environment, you’d typically create a cluster with multiple worker nodes.</p>
+</blockquote>
+
+<ol>
+  <li>In the Azure portal, browse to the <strong>dp000-<em>xxxxxxx</em></strong> resource group that was created by the script you ran.</li>
+  <li>Select the <strong>databricks<em>xxxxxxx</em></strong> Azure Databricks Service resource.</li>
+  <li>In the <strong>Overview</strong> page for <strong>databricks<em>xxxxxxx</em></strong>, use the <strong>Launch Workspace</strong> button to open your Azure Databricks workspace in a new browser tab; signing in if prompted.</li>
+  <li>If a <strong>What’s your current data project?</strong> message is displayed, select <strong>Finish</strong> to close it. Then view the Azure Databricks workspace portal and note that the sidebar on the left side contains icons for the various tasks you can perform. The sidebar expands to show the names of the task categories.</li>
+  <li>
+    <p>Select the <strong>(+) Create</strong> task, and then select <strong>Cluster</strong>.</p>
+
+    <p><strong>Note</strong>: If a tip is displayed, use the <strong>Got it</strong> button to close it. This applies to any future tips that may be displayed as you navigate the workspace interface for the first time.</p>
+  </li>
+  <li>In the <strong>New Cluster</strong> page, create a new cluster with the following settings:
+    <ul>
+      <li><strong>Cluster name</strong>: <em>User Name’s</em> cluster (the default cluster name)</li>
+      <li><strong>Cluster mode</strong>: Single Node</li>
+      <li><strong>Access mode</strong> (<em>if prompted</em>): Single user</li>
+      <li><strong>Databricks runtime version</strong>: 10.4 LTS (Scala 2.12, Spark 3.2.1)</li>
+      <li><strong>Use Photon Acceleration</strong>: Unselected</li>
+      <li><strong>Node type</strong>: Standard_DS3_v2</li>
+      <li><strong>Terminate after</strong> <em>30</em> <strong>minutes of inactivity</strong></li>
+    </ul>
+  </li>
+  <li>Wait for the cluster to be created. It may take a minute or two.</li>
+</ol>
+
+<blockquote>
+  <p><strong>Note</strong>: If your cluster fails to start, your subscription may have insufficient quota in the region where your Azure Databricks workspace is provisioned. See <a href="https://docs.microsoft.com/azure/databricks/kb/clusters/azure-core-limit">CPU core limit prevents cluster creation</a> for details. If this happens, you can try deleting your workspace and creating a new one in a different region. You can specify a region as a parameter for the setup script like this: <code>./setup.ps1 eastus</code></p>
+</blockquote>
+
+<h2 id="use-spark-to-analyze-a-data-file">Use Spark to analyze a data file</h2>
+
+<p>As in many Spark environments, Databricks supports the use of notebooks to combine notes and interactive code cells that you can use to explore data.</p>
+
+<ol>
+  <li>In the sidebar, use the <strong>(+) Create</strong> task to create a <strong>Notebook</strong> with the following properties:
+    <ul>
+      <li><strong>Name</strong>: Explore products</li>
+      <li><strong>Default language</strong>: Python</li>
+      <li><strong>Cluster</strong>: <em>User Name’s</em> cluster</li>
+    </ul>
+  </li>
+  <li>In the <strong>Explore products</strong> notebook, on the <strong>🗏 File</strong> menu, select <strong>Upload Data</strong>.</li>
+  <li>
+    <p>In the <strong>Upload Data</strong> dialog box, note the <strong>DBFS Target Directory</strong> to where the file will be uploaded. Then select the <strong>Files</strong> area, and in the <strong>Open</strong> dialog box, in the <strong>File</strong> box, type <code>https://raw.githubusercontent.com/MicrosoftLearning/mslearn-databricks/main/Allfiles/Labs/01/adventureworks/products.csv</code> and select <strong>Open</strong>. Then, when the file has been uploaded, select <strong>Next</strong>.</p>
+
+    <blockquote>
+      <p><strong>Tip</strong>: If your browser or operating system doesn’t support entering a URL in the <strong>File</strong> box, download the CSV file to your computer and then upload it from the local folder where you saved it.</p>
+    </blockquote>
+  </li>
+  <li>In the <strong>Access files from notebooks</strong> pane, select the sample PySpark code and copy it to the clipboard. You will use it to load the data from the file into a DataFrame. Then select <strong>Done</strong>.</li>
+  <li>
+    <p>In the <strong>Explore products</strong> notebook, in the empty code cell, paste the code you copied; which should look similar to this:</p>
+
+    <div class="code-header mt-3 mb-0 bg-light d-flex justify-content-between border"><span class="mx-2 text-muted text-capitalize font-weight-light">code</span><button class="m-0 btn btn-code btn-sm btn-light codeBtn rounded-0 border-left text-muted font-weight-light" data-clipboard-target="#codeBlock2" type="button"><i class="fa fa-files-o mr-2" aria-hidden="true"></i>Copy</button></div><pre id="codeBlock2" class="mt-0"><code class="language-python hljs"> df1 = spark.read.format(<span class="hljs-string"><span class="hljs-string">"csv"</span></span>).option(<span class="hljs-string"><span class="hljs-string">"header"</span></span>, <span class="hljs-string"><span class="hljs-string">"true"</span></span>).load(<span class="hljs-string"><span class="hljs-string">"dbfs:/FileStore/shared_uploads/user@outlook.com/products_1_.csv"</span></span>)
+</code></pre>
+  </li>
+  <li>Use the <strong>▸ Run Cell</strong> menu option at the top-right of the cell to run it, starting and attaching the cluster if prompted.</li>
+  <li>Wait for the Spark job run by the code to complete. The code has created a <em>dataframe</em> object named <strong>df1</strong> from the data in the file you uploaded.</li>
+  <li>
+    <p>Under the existing code cell, use the <strong>+</strong> icon to add a new code cell. Then in the new cell, enter the following code:</p>
+
+    <div class="code-header mt-3 mb-0 bg-light d-flex justify-content-between border"><span class="mx-2 text-muted text-capitalize font-weight-light">code</span><button class="m-0 btn btn-code btn-sm btn-light codeBtn rounded-0 border-left text-muted font-weight-light" data-clipboard-target="#codeBlock3" type="button"><i class="fa fa-files-o mr-2" aria-hidden="true"></i>Copy</button></div><pre id="codeBlock3" class="mt-0"><code class="language-python hljs"> display(df1)
+</code></pre>
+  </li>
+  <li>
+    <p>Use the <strong>▸ Run Cell</strong> menu option at the top-right of the new cell to run it. This code displays the contents of the dataframe, which should look similar to this:</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>ProductID</th>
+          <th>ProductName</th>
+          <th>Category</th>
+          <th>ListPrice</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>771</td>
+          <td>Mountain-100 Silver, 38</td>
+          <td>Mountain Bikes</td>
+          <td>3399.9900</td>
+        </tr>
+        <tr>
+          <td>772</td>
+          <td>Mountain-100 Silver, 42</td>
+          <td>Mountain Bikes</td>
+          <td>3399.9900</td>
+        </tr>
+        <tr>
+          <td>…</td>
+          <td>…</td>
+          <td>…</td>
+          <td>…</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li>Above the table of results, select <strong>+</strong> and then select <strong>Visualization</strong> to view the visualization editor, and then apply the following options:
+    <ul>
+      <li><strong>Visualization type</strong>: Bar</li>
+      <li><strong>X Column</strong>: Category</li>
+      <li><strong>Y Column</strong>: <em>Add a new column and select</em> <strong>ProductID</strong>. <em>Apply the</em> <strong>Count</strong> <em>aggregation</em>.</li>
+    </ul>
+
+    <p>Save the visualization and observe that it is displayed in the notebook, like this:</p>
+
+    <p><a href="./databricks1_files/databricks-chart.png" target="_blank"><img src="./databricks1_files/databricks-chart.png" alt="A bar chart showing product counts by category"></a></p>
+  </li>
+</ol>
+
+<h2 id="create-and-query-a-database-table">Create and query a database table</h2>
+
+<p>While many data analysis are comfortable using languages like Python or Scala to work with data in files, a lot of data analytics solutions are built on relational databases; in which data is stored in tables and manipulated using SQL.</p>
+
+<ol>
+  <li>In the <strong>Explore products</strong> notebook, under the chart output from the previously run code cell, use the <strong>+</strong> icon to add a new cell.</li>
+  <li>
+    <p>Enter and run the following code in the new cell:</p>
+
+    <div class="code-header mt-3 mb-0 bg-light d-flex justify-content-between border"><span class="mx-2 text-muted text-capitalize font-weight-light">code</span><button class="m-0 btn btn-code btn-sm btn-light codeBtn rounded-0 border-left text-muted font-weight-light" data-clipboard-target="#codeBlock4" type="button"><i class="fa fa-files-o mr-2" aria-hidden="true"></i>Copy</button></div><pre id="codeBlock4" class="mt-0"><code class="language-python hljs"> df1.write.saveAsTable(<span class="hljs-string"><span class="hljs-string">"products"</span></span>)
+</code></pre>
+  </li>
+  <li>
+    <p>When the cell has completed, add a new cell under it with the following code:</p>
+
+    <div class="code-header mt-3 mb-0 bg-light d-flex justify-content-between border"><span class="mx-2 text-muted text-capitalize font-weight-light">sql</span><button class="m-0 btn btn-code btn-sm btn-light codeBtn rounded-0 border-left text-muted font-weight-light" data-clipboard-target="#codeBlock5" type="button"><i class="fa fa-files-o mr-2" aria-hidden="true"></i>Copy</button></div><pre id="codeBlock5" class="mt-0"><code class="language-sql hljs"> %sql
+
+ <span class="hljs-keyword"><span class="hljs-keyword">SELECT</span></span> ProductName, ListPrice
+ <span class="hljs-keyword"><span class="hljs-keyword">FROM</span></span> products
+ <span class="hljs-keyword"><span class="hljs-keyword">WHERE</span></span> <span class="hljs-keyword"><span class="hljs-keyword">Category</span></span> = <span class="hljs-string"><span class="hljs-string">'Touring Bikes'</span></span>;
+</code></pre>
+  </li>
+  <li>Run the new cell, which contains SQL code to return the name and price of products in the <em>Touring Bikes</em> category.</li>
+  <li>In the tab on the left, select the <strong>Data</strong> task, and verify that the <strong>products</strong> table has been created in the default database (which is unsurprisingly named <strong>default</strong>). It’s possible to use Spark code to create custom databases and a schema of relational tables that data analysts can use to explore data and generate analytical reports.</li>
+</ol>
+
+<h2 id="delete-azure-databricks-resources">Delete Azure Databricks resources</h2>
+
+<p>Now you’ve finished exploring Azure Databricks, you must delete the resources you’ve created to avoid unnecessary Azure costs and free up capacity in your subscription.</p>
+
+<ol>
+  <li>Close the Azure Databricks workspace browser tab and return to the Azure portal.</li>
+  <li>On the Azure portal, on the <strong>Home</strong> page, select <strong>Resource groups</strong>.</li>
+  <li>Select the <strong>dp000-<em>xxxxxxx</em></strong> resource group (not the managed resource group), and verify that it contains your Azure Databricks workspace.</li>
+  <li>At the top of the <strong>Overview</strong> page for your resource group, select <strong>Delete resource group</strong>.</li>
+  <li>
+    <p>Enter the <strong>dp000-<em>xxxxxxx</em></strong> resource group name to confirm you want to delete it, and select <strong>Delete</strong>.</p>
+
+    <p>After a few minutes, your resource group and the managed workspace resource groups associated with it will be deleted.</p>
+  </li>
+</ol>
+
+            </article>
+        </main>
+    </div>
+    <footer class="fixed-bottom d-print-none">
+        <nav class="navbar navbar-light bg-light d-flex justify-content-around">
+            <span class="navbar-text">
+                <i class="fa fa-github" aria-hidden="true"></i>
+                <a href="https://github.com/MicrosoftLearning/mslearn-databricks" target="_blank" class="ml-2">
+                    MicrosoftLearning/mslearn-databricks
+                </a>
+            </span>
+        </nav>
+    </footer>
+    <script src="./databricks1_files/jquery-3.2.1.slim.min.js.download" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="./databricks1_files/popper.min.js.download" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="./databricks1_files/bootstrap.min.js.download" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="./databricks1_files/clipboard.min.js.download"></script>
+    <script src="./databricks1_files/highlight.min.js.download"></script>
+    <script src="./databricks1_files/script.js.download"></script>
+
+
+
+</body><grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration></html>
