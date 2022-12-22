@@ -1,0 +1,109 @@
+==================================
+0. Set the context
+==================================
+
+Set-AzContext -Subscription <subscription id>
+
+
+===================================
+1. Create Resource Group
+===================================
+
+$RGName = "PSDeltaLakeDemoRG"
+
+$Location = "eastus2"
+
+./1-ResourceGroup.ps1
+
+
+===================================
+2. Create Data Lake Gen2 Account
+===================================
+
+$StorageName = "pltaxidatalake"
+
+./2-Storage.ps1
+
+
+=================================================================
+3. Create Container in Data Lake Gen2 Account & upload files
+=================================================================
+
+a) Open Storage account created in the previous step
+
+b) In storage account -> Go to Containers
+
+c) Add new container - "taxidata"
+
+d) Create directory in taxidata container - "Raw"
+
+e) Upload files by creating sub-directories (follow instructions in Setup document)
+
+
+============================================================
+4. Create Azure AD Application and generate client secret
+============================================================
+
+Connect-AzureAD
+
+$AppName = "ps-databricksapp"
+
+./3-AzureADApp.ps1
+
+
+============================================================
+5. Grant Access to Azure AD Application on Storage Account
+============================================================
+
+./4-RoleAssignment.ps1
+
+
+============================================================
+6. Create Azure Databricks Workspace
+============================================================
+
+$DatabricksWorkspaceName = "PSWorkspace"
+
+./5-DatabricksWorkspace.ps1
+
+
+============================================================
+7. Create Cluster
+============================================================
+
+- Mode: Single Node cluster
+- Databricks Runtime: Latest (at least 10.4 LTS)
+- Termination time: 30 minutes
+
+============================================================
+8. Mount Data Lake with Databricks File System (DBFS)
+============================================================
+
+- Use the "Mount Data Lake" notebook
+
+- Paste the values of ClientId, ClientSecret, TenantId, Data Lake name and container name
+
+
+============================================================
+9. Create Event Hub Namespace
+============================================================
+
+Set-Item Env:\SuppressAzurePowerShellBreakingChangeWarnings "true"
+
+$RGName = "PSDeltaLakeDemoRG"
+
+$EHNamespace = "pstaxinamespace"
+
+$Location = "eastus2"
+
+$EventHubName = "RideEventHub"
+
+./6-EventHub.ps1
+
+
+
+
+
+
+
+
